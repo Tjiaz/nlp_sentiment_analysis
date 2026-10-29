@@ -1,25 +1,28 @@
 # NLP Sentiment Analysis
 
-This project builds a sentiment analysis model for movie reviews using spaCy's text classification pipeline. The model is trained on the IMDb-style ACL IMDb dataset and classifies review text as either positive or negative.
+A notebook-based natural language processing project for classifying movie reviews as positive or negative using spaCy's text classification pipeline.
 
-The repository contains a Jupyter notebook, `nlp-sentiment-analysis.ipynb`, which walks through:
+This project demonstrates how to preprocess review text, build a supervised sentiment classification model, evaluate its performance, and save the trained model for inference.
 
-- loading and preparing review data
-- converting labels into spaCy text classification format
-- training a binary text classifier
-- evaluating the model with precision, recall, and F-score
-- saving the trained model and plotting training metrics
+## Overview
+
+Sentiment analysis is one of the most common tasks in NLP. In this project, a binary classifier is trained on labeled review text to determine whether a review expresses a positive or negative sentiment.
+
+The workflow includes:
+
+- loading and cleaning text review data
+- converting labels into spaCy-compatible category format
+- training a text classification model from scratch
+- tracking precision, recall, and F-score
+- saving the trained model artifacts
 - testing the final model on a sample review
 
-## Project Overview
+## Project Goals
 
-The goal of this project is to predict the sentiment of a written review using natural language processing techniques. It demonstrates how to:
-
-- clean and normalize text data
-- map labels to spaCy textcat categories
-- train a text classification model from scratch
-- evaluate model performance
-- save the trained model for later inference
+- Build a working sentiment classification model
+- Learn how text classification works in spaCy
+- Evaluate the model using standard classification metrics
+- Package the training workflow in a reproducible notebook
 
 ## Tech Stack
 
@@ -32,33 +35,46 @@ The goal of this project is to predict the sentiment of a written review using n
 
 ## Dataset
 
-This project uses the ACL IMDb dataset structure:
+The project uses the IMDb-style ACL IMDb sentiment dataset, organized into positive and negative review folders.
 
-- `train/pos/`
-- `train/neg/`
+Typical dataset structure:
 
-Each file contains a review as plain text. The notebook loads these files, normalizes line breaks, and converts each review into a spaCy-compatible training example.
+```text
+train/
+  pos/
+  neg/
+```
 
-## Model Details
+Each text file contains a review, and the folder name defines the label.
 
-The project uses a spaCy `textcat` model with two labels:
+## Model Architecture
+
+The project uses spaCy's `textcat` component with two labels:
 
 - `pos`
 - `neg`
 
-Training is performed using mini-batches and evaluation is tracked across iterations using:
+The model is trained using mini-batches and evaluated on a validation/test set with:
 
 - precision
 - recall
 - F-score
 
-In the notebook, the model reaches a best F-score of approximately 0.8271 during validation.
-
 ## Repository Contents
 
-- `nlp-sentiment-analysis.ipynb` — the full training and evaluation workflow
-- `model_artifacts/` — saved trained spaCy model (generated after training)
-- `training_metrics.png` — training performance plot (generated after training)
+```text
+.
+├── nlp-sentiment-analysis.ipynb
+├── README.md
+├── model_artifacts/
+├── training_metrics.png
+└── ...
+```
+
+- `nlp-sentiment-analysis.ipynb`: notebook containing the full training and evaluation workflow
+- `README.md`: project documentation
+- `model_artifacts/`: saved trained spaCy model
+- `training_metrics.png`: visual training metrics plot
 
 ## Getting Started
 
@@ -100,7 +116,7 @@ Then open `nlp-sentiment-analysis.ipynb` and run the cells in order.
 
 ## Usage
 
-After training, the notebook includes a test function that loads the saved model and predicts sentiment for a sample review.
+After training, the notebook loads the saved model and predicts sentiment for a sample review.
 
 Example:
 
@@ -113,32 +129,49 @@ doc = nlp(review)
 print(doc.cats)
 ```
 
-The output will include the model's confidence scores for the `pos` and `neg` labels.
+The model returns probability scores for each class:
 
-## Example Workflow
+```python
+{'pos': 0.98, 'neg': 0.02}
+```
 
-The notebook performs the following steps:
+## Training Workflow
 
-1. Reads text reviews from the dataset directory.
-2. Converts each review into spaCy `Example` objects.
-3. Splits the data into train/test sets.
-4. Initializes a blank English spaCy pipeline with a text classifier.
-5. Trains the model for multiple iterations.
-6. Evaluates performance using validation data.
-7. Saves the best model version to disk.
-8. Tests the trained model on a sample review.
+The notebook follows this pipeline:
+
+1. Reads review files from the dataset directory
+2. Cleans text by replacing HTML-style line breaks like `<br />`
+3. Converts labels into spaCy text classification format
+4. Splits data into training and test sets
+5. Initializes a blank English spaCy model
+6. Adds a text classification pipe
+7. Trains the model over multiple iterations
+8. Evaluates performance on the test set
+9. Saves the best-performing model
+10. Tests the model on custom input
+
+## Example Result
+
+The notebook reports validation performance metrics during training, with the best F-score reaching approximately 0.8271.
+
+This indicates strong classification ability for the selected review dataset.
 
 ## Notes
 
-- The notebook currently assumes the dataset is available in a Kaggle-style directory path. If running locally, update the `data_directory` path in the notebook to match your project structure.
-- For optimal results, you may want to use a larger dataset or tune hyperparameters such as training iterations, batch size, or dropout.
+- The notebook assumes the dataset is available in a Kaggle-style local directory structure. If running locally, update the `data_directory` path to match your environment.
+- For stronger performance, you can expand the dataset, tune hyperparameters, or train for more iterations.
+- This project is primarily an educational and experimental NLP workflow rather than a production-ready API service.
 
 ## License
 
-This project does not currently include a specific license file. If you plan to share or reuse it publicly, consider adding an appropriate open-source license.
+No explicit license file is currently included in the repository. If you plan to publish or share the project publicly, consider adding an appropriate open-source license.
 
 ## Acknowledgements
 
-- spaCy for the NLP pipeline and text classification tooling
-- ACL IMDb dataset for the training data
+- spaCy for the NLP pipeline and text classification tools
+- IMDb sentiment dataset for the labeled review examples
 - Python ecosystem libraries used throughout the workflow
+
+## Contact
+
+For questions or collaboration opportunities, feel free to reach out through the repository owner or project maintainer.
